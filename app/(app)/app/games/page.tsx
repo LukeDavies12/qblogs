@@ -14,7 +14,7 @@ export default async function Page() {
   return (
     <div className="space-y-1">
       <h1>Games</h1>
-      <ul className="space-y-2">
+      <ul className="space-y-2 pb-3">
         {games.map((game) => (
           <li key={game.id}>
             <Link
@@ -28,6 +28,7 @@ export default async function Page() {
           </li>
         ))}
       </ul>
+      <Link href={"/app/game/new"} className="link">Add New Game</Link>
     </div>
   )
 }

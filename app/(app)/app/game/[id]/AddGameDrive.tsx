@@ -1,6 +1,6 @@
 "use client"
 
-import { createGameDrive } from "@/data/app/actions/AddGameDrive";
+import { createGameDrive } from "@/data/app/actions/GameDrives";
 import { useState, useTransition } from "react";
 
 interface CreateGameDriveProps {

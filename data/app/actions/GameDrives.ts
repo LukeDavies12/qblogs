@@ -15,7 +15,7 @@ export async function createGameDrive(gameId: number): Promise<GameDrive | null>
     .limit(1)
     .single();
 
-  if (fetchError && fetchError.code !== "PGRST116") {
+  if (fetchError) {
     throw new Error(fetchError.message);
   }
 
