@@ -28,7 +28,7 @@ export default async function Page() {
           </li>
         ))}
       </ul>
-      <Link href={"/app/game/new"} className="link">Add New Game</Link>
+      <Link href={"/app/games/new"} className="link">Add New Game</Link>
     </div>
   )
 }

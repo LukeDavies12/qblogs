@@ -1,5 +1,7 @@
+import BackLink from "@/comp/ui/backlink";
 import { getDriveById } from "@/data/app/get/gameDrive";
 import { GameDriveWithPlays } from "@/data/types/games";
+import LogGamePlays from "./LogGamePlays";
 
 export default async function Page({
   params,
@@ -9,7 +11,8 @@ export default async function Page({
   const drive = await getDriveById(Number(params.id)) as GameDriveWithPlays;
 
   return (
-    <div>
+    <>
+      <BackLink href={`/app/game/${drive.game_id}`} label="Game" />
       <h1>Drive {drive.number_in_game}</h1>
       <h2>Plays</h2>
       <ul>
@@ -19,6 +22,8 @@ export default async function Page({
           </li>
         ))}
       </ul>
-    </div>
+      <h2>Log</h2>
+      <LogGamePlays gameDriveId={drive.id} />
+    </>
   )
 }

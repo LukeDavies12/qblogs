@@ -1,3 +1,4 @@
+import BackLink from "@/comp/ui/backlink";
 import { getGameById } from "@/data/app/get/game";
 import { IndividualGame } from "@/data/types/games";
 import { formatDate } from "@/data/types/parseDate";
@@ -13,6 +14,7 @@ export default async function Page({
 
   return (
     <>
+      <BackLink href="/app/games" label="All Games" />
       <h1>{formatDate(game.date)} vs {game.against} Game</h1>
       <h2>Log Plays</h2>
       {game.game_drives.map((drive) => (

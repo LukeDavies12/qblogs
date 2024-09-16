@@ -30,10 +30,18 @@ a.link {
   @apply underline text-neutral-700 hover:text-neutral-600 hover:no-underline;
 }
 
-input[type="text"] {
-  @apply bg-neutral-300 hover:border-e-neutral-200 py-1 px-3 text-neutral-700 placeholder:text-neutral-600;
-}
-
 button.primary {
   @apply px-6 py-0.5 rounded-lg font-medium border-2 border-sky-700 text-sky-700 bg-transparent hover:bg-sky-700 hover:text-white
+}
+
+label {
+  @apply block text-sm font-medium text-neutral-700;
+}
+
+input, textarea {
+  @apply px-2 py-1 rounded-md bg-neutral-300 hover:bg-neutral-200 outline-none w-full placeholder:text-neutral-500
+}
+
+select {
+  @apply px-2 py-1 rounded-md bg-neutral-300 hover:bg-neutral-200 outline-none w-full
 }
