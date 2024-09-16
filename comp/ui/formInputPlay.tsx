@@ -38,7 +38,7 @@ export const FormInputPlay = ({ label, name, type, options, required, onChange }
           name={name} 
           onChange={onChange} 
           required={required}
-          className="w-full px-2 py-1 text-sm border border-gray-300 rounded"
+          className="text-sm"
         >
           <option value="">Select {label}</option>
           {options?.map((option) => (
@@ -51,7 +51,7 @@ export const FormInputPlay = ({ label, name, type, options, required, onChange }
           name={name} 
           rows={3} 
           onChange={onChange}
-          className="w-full px-2 py-1 text-sm border border-gray-300 rounded"
+          className="text-sm"
         />
       ) : (
         <input
@@ -60,7 +60,7 @@ export const FormInputPlay = ({ label, name, type, options, required, onChange }
           name={name}
           onChange={onChange}
           required={required}
-          className="w-full px-2 py-1 text-sm border border-gray-300 rounded"
+          className="text-sm"
           {...(type === 'number' ? { min: name === 'down' ? 1 : undefined, max: name === 'down' ? 4 : undefined } : {})}
         />
       )}
