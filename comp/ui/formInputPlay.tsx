@@ -7,10 +7,11 @@ export type InputPropsPlay = {
   type: string;
   options?: string[];
   required?: boolean;
+  placeholder?: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => void;
 };
 
-export const FormInputPlay = ({ label, name, type, options, required, onChange }: InputPropsPlay) => {
+export const FormInputPlay = ({ label, name, type, options, required, placeholder, onChange }: InputPropsPlay) => {
   const id = `${name}-input`;
 
   if (type === 'checkbox') {
@@ -33,25 +34,26 @@ export const FormInputPlay = ({ label, name, type, options, required, onChange }
     <div className="mb-2">
       <label htmlFor={id} className="block text-sm mb-1 text-gray-700">{label}</label>
       {type === 'select' ? (
-        <select 
-          id={id} 
-          name={name} 
-          onChange={onChange} 
+        <select
+          id={id}
+          name={name}
+          onChange={onChange}
           required={required}
-          className="text-sm"
+          className="text-sm w-full"
         >
-          <option value="">Select {label}</option>
+          <option value="">{placeholder || `Select ${label}`}</option>
           {options?.map((option) => (
             <option key={option} value={option}>{option}</option>
           ))}
         </select>
       ) : type === 'textarea' ? (
-        <textarea 
-          id={id} 
-          name={name} 
-          rows={3} 
+        <textarea
+          id={id}
+          name={name}
+          rows={3}
           onChange={onChange}
-          className="text-sm"
+          placeholder={placeholder}
+          className="text-sm w-full"
         />
       ) : (
         <input
@@ -60,7 +62,8 @@ export const FormInputPlay = ({ label, name, type, options, required, onChange }
           name={name}
           onChange={onChange}
           required={required}
-          className="text-sm"
+          placeholder={placeholder}
+          className="text-sm w-full"
           {...(type === 'number' ? { min: name === 'down' ? 1 : undefined, max: name === 'down' ? 4 : undefined } : {})}
         />
       )}

@@ -61,33 +61,120 @@ export default function LogGamePlays({ gameDriveId }: { gameDriveId: number }) {
     }
   };
 
-  const formFields: InputPropsPlay[] = [
-    { label: 'Hash', name: 'hash', type: 'select', options: ['L', 'LM', 'M', 'RM', 'R'], required: true, onChange: handleInputChange },
-    { label: 'Yard Line', name: 'yard_line', type: 'number', onChange: handleInputChange },
-    { label: 'Down', name: 'down', type: 'number', onChange: handleInputChange },
-    { label: 'Distance', name: 'distance', type: 'number', onChange: handleInputChange },
-    { label: 'Personnel', name: 'personnel', type: 'select', options: ['00', '01', '10', '11', '12', '13', '20', '21', '22', '23'], required: true, onChange: handleInputChange },
-    { label: 'Formation Name', name: 'formation_name', type: 'text', required: true, onChange: handleInputChange },
-    { label: 'Back Alignment', name: 'back_alignment', type: 'text', onChange: handleInputChange },
-    { label: 'Formation Strength', name: 'formation_strength', type: 'select', options: ['L', 'R'], required: true, onChange: handleInputChange },
-    { label: 'Motion', name: 'motion', type: 'text', onChange: handleInputChange },
-    { label: 'Pass Protection', name: 'pass_protection', type: 'text', onChange: handleInputChange },
-    { label: 'Play Call', name: 'play_call', type: 'text', required: true, onChange: handleInputChange },
-    { label: 'Play Call Strength', name: 'play_call_strength', type: 'select', options: ['L', 'R'], required: true, onChange: handleInputChange },
-    { label: 'Call Tag', name: 'call_tag', type: 'text', onChange: handleInputChange },
-    { label: 'Play Call Grouping', name: 'play_call_grouping', type: 'select', options: logPlayTypes, required: true, onChange: handleInputChange },
-    { label: 'Result', name: 'result', type: 'select', options: ["Complete", "Incomplete", "Run", "QB Run", "Sack", "Fumble", "Interception", "TD Pass", "TD Run", "TD QB Run"], required: true, onChange: handleInputChange },
-    { label: 'Yards', name: 'yards', type: 'number', required: true, onChange: handleInputChange },
-    { label: 'Outstanding QB Play', name: 'outstanding_qb_play', type: 'checkbox', onChange: handleInputChange },
+  const baseFormFields: InputPropsPlay[] = [
+    { label: '# in Drive*', name: 'num_in_game_drive', type: 'number', required: true, onChange: handleInputChange, placeholder: 'Enter play number' },
+    { label: 'Hash*', name: 'hash', type: 'select', options: ['L', 'LM', 'M', 'RM', 'R'], required: true, onChange: handleInputChange, placeholder: 'Select hash' },
+    { label: 'Yard Line*', name: 'yard_line', type: 'number', onChange: handleInputChange, placeholder: 'Enter yard line', required: true },
+    { label: 'Down*', name: 'down', type: 'number', onChange: handleInputChange, placeholder: 'Enter down', required: true },
+    { label: 'Distance*', name: 'distance', type: 'number', onChange: handleInputChange, placeholder: 'Enter distance', required: true },
+    { label: 'Personnel*', name: 'personnel', type: 'select', options: ['00', '01', '10', '11', '12', '13', '20', '21', '22', '23'], required: true, onChange: handleInputChange, placeholder: 'Select personnel' },
+    { label: 'Formation Name*', name: 'formation_name', type: 'text', required: true, onChange: handleInputChange, placeholder: 'Enter formation name' },
+    { label: 'Back Alignment', name: 'back_alignment', type: 'text', onChange: handleInputChange, placeholder: 'Enter back alignment' },
+    { label: 'Formation Strength*', name: 'formation_strength', type: 'select', options: ['L', 'R'], required: true, onChange: handleInputChange, placeholder: 'Select formation strength' },
+    { label: 'Motion', name: 'motion', type: 'text', onChange: handleInputChange, placeholder: 'Enter motion' },
+    { label: 'Pass Protection', name: 'pass_protection', type: 'text', onChange: handleInputChange, placeholder: 'Enter pass protection' },
+    { label: 'Play Call*', name: 'play_call', type: 'text', required: true, onChange: handleInputChange, placeholder: 'Enter play call' },
+    { label: 'Play Call Strength*', name: 'play_call_strength', type: 'select', options: ['L', 'R'], required: true, onChange: handleInputChange, placeholder: 'Select play call strength' },
+    { label: 'Call Tag', name: 'call_tag', type: 'text', onChange: handleInputChange, placeholder: 'Enter call tag' },
+    { label: 'Play Call Type*', name: 'play_call_grouping', type: 'select', options: logPlayTypes, required: true, onChange: handleInputChange, placeholder: 'Select play call grouping' },
+    { label: 'Result*', name: 'result', type: 'select', options: ["Complete", "Incomplete", "Run", "QB Run", "Scramble", "Sack", "Fumble", "Interception", "TD Pass", "TD Run", "TD Scramble", "TD QB Run"], required: true, onChange: handleInputChange, placeholder: 'Select result' },
+    { label: 'Yards*', name: 'yards', type: 'number', required: true, onChange: handleInputChange, placeholder: 'Enter yards' },
     { label: 'Missed Check', name: 'missed_check', type: 'checkbox', required: true, onChange: handleInputChange },
+    { label: 'Outstanding QB Play', name: 'outstanding_qb_play', type: 'checkbox', onChange: handleInputChange },
     { label: 'Off Schedule Play on QB', name: 'off_schedule_play_on_qb', type: 'checkbox', onChange: handleInputChange },
     { label: 'Turnover Worthy Play', name: 'turnover_worthy_play', type: 'checkbox', required: true, onChange: handleInputChange },
-    { label: 'QB Pressured', name: 'qb_pressured', type: 'checkbox', required: true, onChange: handleInputChange },
-    { label: 'Pass Read', name: 'pass_read', type: 'checkbox', onChange: handleInputChange },
-    { label: 'Pass Ball Placement', name: 'pass_ball_placement', type: 'checkbox', onChange: handleInputChange },
-    { label: 'Run RPO Key Read', name: 'run_rpo_key_read', type: 'checkbox', onChange: handleInputChange },
-    { label: 'QB Run Execution', name: 'qb_run_execution', type: 'checkbox', onChange: handleInputChange },
-    { label: 'QB Run Read Key', name: 'qb_run_read_key', type: 'checkbox', onChange: handleInputChange },
+  ];
+
+  const getConditionalFields = (): InputPropsPlay[] => {
+    const playCallGrouping = formData.play_call_grouping;
+    const result = formData.result;
+
+    switch (playCallGrouping) {
+      case 'Pass':
+        if(result === 'Incomplete' || result === 'Complete' || result === 'TD Pass' || result === 'Interception') {
+          return [
+            { label: 'QB Pressured', name: 'qb_pressured', type: 'checkbox', required: true, onChange: handleInputChange },
+            { label: 'Pass Read', name: 'pass_read', type: 'checkbox', onChange: handleInputChange },
+            { label: 'Pass Ball Placement', name: 'pass_ball_placement', type: 'checkbox', onChange: handleInputChange },
+          ];
+        }
+        if (result === 'Sack') {
+          return [
+            { label: 'QB Pressured', name: 'qb_pressured', type: 'checkbox', required: true, onChange: handleInputChange },
+          ];
+        }
+        if (result === 'Fumble') {
+          return [
+            { label: 'QB Pressured', name: 'qb_pressured', type: 'checkbox', required: true, onChange: handleInputChange },
+          ];
+        }
+        if (result === 'Scramble') {
+          return [
+            { label: 'QB Pressured', name: 'qb_pressured', type: 'checkbox', required: true, onChange: handleInputChange },
+          ];
+        }
+        return [];
+      case 'Run with RPO':
+        if(result === 'Run' || result === 'TD Run' || result === 'Fumble' || result === 'Sack' || result === 'Scramble') {
+          return [
+            { label: 'Run RPO Key Read', name: 'run_rpo_key_read', type: 'checkbox', onChange: handleInputChange },
+          ];
+        }
+        if (result === 'Incomplete' || result === 'Complete' || result === 'TD Pass' || result === 'Interception') {
+          return [
+            { label: 'Pass Ball Placement', name: 'pass_ball_placement', type: 'checkbox', onChange: handleInputChange },
+          ];
+        }
+        return [];
+      case 'QB Run no Read':
+        return [
+          { label: 'QB Run Execution', name: 'qb_run_execution', type: 'checkbox', onChange: handleInputChange },
+        ];
+      case 'QB Run with RPO':
+        if (result === 'Run') {
+          return [
+            { label: 'Run RPO Key Read', name: 'run_rpo_key_read', type: 'checkbox', onChange: handleInputChange },
+          ];
+        }
+        if (result === 'QB Run') {
+          return [
+            { label: 'Run RPO Key Read', name: 'run_rpo_key_read', type: 'checkbox', onChange: handleInputChange },
+            { label: 'QB Run Execution', name: 'qb_run_execution', type: 'checkbox', onChange: handleInputChange },
+          ];
+        }
+        if (result === 'Incomplete' || result === 'Complete' || result === 'TD Pass' || result === 'Interception') {
+          return [
+            { label: 'Run RPO Key Read', name: 'run_rpo_key_read', type: 'checkbox', onChange: handleInputChange },
+            { label: 'Pass Ball Placement', name: 'pass_ball_placement', type: 'checkbox', onChange: handleInputChange },
+          ];
+        }
+        if (result === 'Sack') {
+          return [
+            { label: 'Run RPO Key Read', name: 'run_rpo_key_read', type: 'checkbox', onChange: handleInputChange },
+          ];
+        }
+        return [];
+      case 'QB Run with Run Read Key':
+        if (result === 'Run') {
+          return [
+            { label: 'QB Run Read Key', name: 'qb_run_read_key', type: 'checkbox', onChange: handleInputChange },
+          ];
+        }
+        if (result === 'QB Run') {
+          return [
+            { label: 'QB Run Read Key', name: 'qb_run_read_key', type: 'checkbox', onChange: handleInputChange },
+            { label: 'QB Run Execution', name: 'qb_run_execution', type: 'checkbox', onChange: handleInputChange },
+          ];
+        }
+        return [];
+      default:
+        return [];
+    }
+  };
+
+  const finalFormFields: InputPropsPlay[] = [
+    ...baseFormFields,
+    ...getConditionalFields(),
     { label: 'Bad Play Reason', name: 'bad_play_reason', type: 'textarea', onChange: handleInputChange },
     { label: 'Notes', name: 'notes', type: 'textarea', onChange: handleInputChange },
   ];
@@ -96,7 +183,7 @@ export default function LogGamePlays({ gameDriveId }: { gameDriveId: number }) {
     <form onSubmit={handleSubmit} className="p-4 bg-neutral-50 rounded-2xl">
       {error && <p className="text-red-500 mb-4">{error}</p>}
       <div className='grid grid-cols-7 gap-1 items-center'>
-        {formFields.map((field) => (
+        {finalFormFields.map((field) => (
           <FormInputPlay key={field.name} {...field} onChange={handleInputChange} />
         ))}
       </div>

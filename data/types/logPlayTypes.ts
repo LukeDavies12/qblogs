@@ -4,7 +4,7 @@ export const logPlayTypes = [
   "Run no RPO",
   "QB Run no Read",
   "QB Run with RPO",
-  "QB Run with Read Key",
+  "QB Run with Run Read Key",
 ];
 
 export interface Play {
@@ -48,11 +48,13 @@ export type PlayResult =
   | "Incomplete"
   | "Run"
   | "QB Run"
+  | "Scramble"
   | "Sack"
   | "Fumble"
   | "Interception"
   | "TD Pass"
   | "TD Run"
+  | "TD Scramble"
   | "TD QB Run";
 export type FormationStrength = "L" | "R";
 export type PlayHash = "L" | "LM" | "M" | "RM" | "R";
