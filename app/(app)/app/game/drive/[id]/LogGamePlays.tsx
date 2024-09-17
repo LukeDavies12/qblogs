@@ -3,33 +3,36 @@
 import { FormInputPlay, InputPropsPlay } from '@/comp/ui/formInputPlay';
 import { logGamePlay } from '@/data/app/actions/Plays';
 import { Play, logPlayTypes } from '@/data/types/logPlayTypes';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export default function LogGamePlays({ gameDriveId }: { gameDriveId: number }) {
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [formData, setFormData] = useState<Partial<Play>>({});
   const [isFormValid, setIsFormValid] = useState(false);
+  const formRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
     const requiredFields: (keyof Play)[] = [
-      'hash', 'personnel', 'formation_name', 'formation_strength', 'play_call',
-      'play_call_strength', 'result', 'yards', 'team_qb_id',
-      'turnover_worthy_play', 'qb_pressured', 'missed_check', 'play_call_grouping'
+      'num_in_game_drive', 'hash', 'yard_line', 'down', 'distance', 'personnel',
+      'formation_name', 'formation_strength', 'play_call',
+      'play_call_strength', 'result', 'yards', 'play_call_grouping'
     ];
-    
-    const isValid = requiredFields.every(field => 
-      formData[field] !== undefined && formData[field] !== ''
-    );
+
+    const isValid = requiredFields.every(field => {
+      const value = formData[field];
+      return value !== undefined && value !== '' && value !== null;
+    });
+
     setIsFormValid(isValid);
-  }, [formData]);
+  }, [formData, isFormValid]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target;
-    let inputValue: string | number | boolean | undefined = value;
+    let inputValue: string | number | boolean = value;
 
     if (type === 'number') {
-      inputValue = value === '' ? undefined : Number(value);
+      inputValue = value === '' ? '' : Number(value);
     } else if (type === 'checkbox') {
       inputValue = (e.target as HTMLInputElement).checked;
     }
@@ -48,12 +51,14 @@ export default function LogGamePlays({ gameDriveId }: { gameDriveId: number }) {
       const formDataToSend = new FormData();
       Object.entries(formData).forEach(([key, value]) => {
         if (value !== undefined) {
-          formDataToSend.append(key, value as string | Blob); 
+          formDataToSend.append(key, value as string | Blob);
         }
       });
       await logGamePlay(formDataToSend, gameDriveId);
       setFormData({});
-      e.currentTarget.reset();
+      if (formRef.current) {
+        formRef.current.reset();
+      }
     } catch (error) {
       setError(error instanceof Error ? error.message : 'An error occurred while logging the play.');
     } finally {
@@ -77,12 +82,13 @@ export default function LogGamePlays({ gameDriveId }: { gameDriveId: number }) {
     { label: 'Play Call Strength*', name: 'play_call_strength', type: 'select', options: ['L', 'R'], required: true, onChange: handleInputChange, placeholder: 'Select play call strength' },
     { label: 'Call Tag', name: 'call_tag', type: 'text', onChange: handleInputChange, placeholder: 'Enter call tag' },
     { label: 'Play Call Type*', name: 'play_call_grouping', type: 'select', options: logPlayTypes, required: true, onChange: handleInputChange, placeholder: 'Select play call grouping' },
+    { label: 'Play Call Family', name: 'play_call_family', type: 'text', onChange: handleInputChange, placeholder: 'Enter play call family' },
     { label: 'Result*', name: 'result', type: 'select', options: ["Complete", "Incomplete", "Run", "QB Run", "Scramble", "Sack", "Fumble", "Interception", "TD Pass", "TD Run", "TD Scramble", "TD QB Run"], required: true, onChange: handleInputChange, placeholder: 'Select result' },
     { label: 'Yards*', name: 'yards', type: 'number', required: true, onChange: handleInputChange, placeholder: 'Enter yards' },
-    { label: 'Missed Check', name: 'missed_check', type: 'checkbox', required: true, onChange: handleInputChange },
-    { label: 'Outstanding QB Play', name: 'outstanding_qb_play', type: 'checkbox', onChange: handleInputChange },
+    { label: 'Missed Check', name: 'missed_check', type: 'checkbox', onChange: handleInputChange },
+    { label: 'QB Outstanding Play', name: 'outstanding_qb_play', type: 'checkbox', onChange: handleInputChange },
     { label: 'Off Schedule Play on QB', name: 'off_schedule_play_on_qb', type: 'checkbox', onChange: handleInputChange },
-    { label: 'Turnover Worthy Play', name: 'turnover_worthy_play', type: 'checkbox', required: true, onChange: handleInputChange },
+    { label: 'QB Turnover Worthy Play', name: 'turnover_worthy_play', type: 'checkbox', onChange: handleInputChange },
   ];
 
   const getConditionalFields = (): InputPropsPlay[] => {
@@ -91,7 +97,7 @@ export default function LogGamePlays({ gameDriveId }: { gameDriveId: number }) {
 
     switch (playCallGrouping) {
       case 'Pass':
-        if(result === 'Incomplete' || result === 'Complete' || result === 'TD Pass' || result === 'Interception') {
+        if (result === 'Incomplete' || result === 'Complete' || result === 'TD Pass' || result === 'Interception') {
           return [
             { label: 'QB Pressured', name: 'qb_pressured', type: 'checkbox', required: true, onChange: handleInputChange },
             { label: 'Pass Read', name: 'pass_read', type: 'checkbox', onChange: handleInputChange },
@@ -115,13 +121,14 @@ export default function LogGamePlays({ gameDriveId }: { gameDriveId: number }) {
         }
         return [];
       case 'Run with RPO':
-        if(result === 'Run' || result === 'TD Run' || result === 'Fumble' || result === 'Sack' || result === 'Scramble') {
+        if (result === 'Run' || result === 'TD Run' || result === 'Fumble' || result === 'Sack' || result === 'Scramble') {
           return [
             { label: 'Run RPO Key Read', name: 'run_rpo_key_read', type: 'checkbox', onChange: handleInputChange },
           ];
         }
         if (result === 'Incomplete' || result === 'Complete' || result === 'TD Pass' || result === 'Interception') {
           return [
+            { label: 'Run RPO Key Read', name: 'run_rpo_key_read', type: 'checkbox', onChange: handleInputChange },
             { label: 'Pass Ball Placement', name: 'pass_ball_placement', type: 'checkbox', onChange: handleInputChange },
           ];
         }
@@ -180,7 +187,7 @@ export default function LogGamePlays({ gameDriveId }: { gameDriveId: number }) {
   ];
 
   return (
-    <form onSubmit={handleSubmit} className="p-4 bg-neutral-50 rounded-2xl">
+    <form onSubmit={handleSubmit} ref={formRef} className="p-4 bg-neutral-50 rounded-2xl">
       {error && <p className="text-red-500 mb-4">{error}</p>}
       <div className='grid grid-cols-7 gap-1 items-center'>
         {finalFormFields.map((field) => (
@@ -188,7 +195,9 @@ export default function LogGamePlays({ gameDriveId }: { gameDriveId: number }) {
         ))}
       </div>
       <div>
-        <button type="submit" className={`primary mt-2 w-full ${!isFormValid ? 'opacity-50 cursor-not-allowed' : ''}`}  disabled={!isFormValid || isPending}>
+        <button type="submit"
+          className={`primary mt-2 w-full ${!isFormValid ? 'opacity-50 cursor-not-allowed' : ''}`}
+          disabled={!isFormValid || isPending}>
           {isPending ? 'Logging Play...' : 'Log Play'}
         </button>
       </div>

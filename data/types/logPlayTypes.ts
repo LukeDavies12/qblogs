@@ -41,6 +41,8 @@ export interface Play {
   qb_run_read_key?: boolean;
   motion?: string;
   call_tag?: string;
+  on_schedule?: boolean;
+  play_call_family?: string;
 }
 
 export type PlayResult =

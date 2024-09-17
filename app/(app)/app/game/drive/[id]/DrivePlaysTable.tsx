@@ -10,8 +10,9 @@ export const DrivePlaysTable: React.FC<{ plays: Play[] }> = ({ plays }) => {
             <th className="px-4 py-2 text-left text-sm font-semibold text-neutral-600"># in Drive</th>
             <th className="px-4 py-2 text-left text-sm font-semibold text-neutral-600">Down</th>
             <th className="px-4 py-2 text-left text-sm font-semibold text-neutral-600">Distance</th>
-            <th className="px-4 py-2 text-left text-sm font-semibold text-neutral-600">Play Call Family</th>
+            <th className="px-4 py-2 text-left text-sm font-semibold text-neutral-600">Play Call Type</th>
             <th className="px-4 py-2 text-left text-sm font-semibold text-neutral-600">Play Call</th>
+            <th className="px-4 py-2 text-left text-sm font-semibold text-neutral-600">Play Call Family</th>
             <th className="px-4 py-2 text-left text-sm font-semibold text-neutral-600">Result</th>
             <th className="px-4 py-2 text-left text-sm font-semibold text-neutral-600">Yards</th>
             <th className="px-4 py-2 text-left text-sm font-semibold text-neutral-600">On Schedule</th>
@@ -25,13 +26,14 @@ export const DrivePlaysTable: React.FC<{ plays: Play[] }> = ({ plays }) => {
               <td className="px-4 py-2 text-sm">{play.distance}</td>
               <td className="px-4 py-2 text-sm">{play.play_call_grouping}</td>
               <td className="px-4 py-2 text-sm">{play.play_call}</td>
+              <td className="px-4 py-2 text-sm">{play.play_call_family}</td>
               <td className="px-4 py-2 text-sm">{play.result}</td>
               <td className="px-4 py-2 text-sm">{play.yards}</td>
               <td className="px-4 py-2 text-sm">
-                {play.off_schedule_play_on_qb ? (
-                  <XCircleIcon className="text-red-500 h-5 w-5" />
-                ) : (
+              {play.on_schedule === true ? (
                   <CheckCircleIcon className="text-green-500 h-5 w-5" />
+                ) : (
+                  <XCircleIcon className="text-red-500 h-5 w-5" />
                 )}
               </td>
             </tr>
