@@ -68,3 +68,26 @@ export type PlayResult =
   | "TD QB Run";
 export type FormationStrength = "L" | "R";
 export type PlayHash = "L" | "M" | "R";
+
+export interface PlayCallFamilyStats {
+  offSchedule: number;
+  total: number;
+  avgYards?: number;
+  minYards?: number;
+  maxYards?: number;
+  family?: string;
+  yards: number[];
+}
+
+export interface PlayStats {
+  firstDowns: number;
+  firstDownPercentage: number;
+  touchdowns: number;
+  driveTDPercentage: number;
+  redZoneTDPercentage: number;
+  explosives: number;
+  tenYardPlays: number;
+  fiveYardPlays: number;
+  onSchedulePlayPercentage: number;
+  playCallFamilyStats: Record<string, PlayCallFamilyStats>;
+}

@@ -21,6 +21,7 @@ export type GameDrive = {
   id: number;
   game_id: number;
   number_in_game: number;
+  plays?: Play[];
 };
 
 export type GameDriveWithPlays = {
