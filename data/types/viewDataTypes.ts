@@ -1,3 +1,5 @@
+import { Play } from "./logPlayTypes";
+
 export interface PlayCallFamilyStats {
   offSchedule: number;
   threePlusYards: number;
@@ -23,4 +25,35 @@ export interface TeamStats {
   onSchedulePlayPercentage: number;
   totalPlays: number;
   playCallFamilyStats: Record<string, PlayCallFamilyStats>;
+}
+ 
+export interface QBStats {
+  qbFullName: string;
+  attempts: number;
+  passReadsCount: number;
+  passBallPlacementCount: number;
+  completions: number;
+  passingYards: number;
+  passingTouchdowns: number;
+  interceptions: number;
+  rpoPlays: number;
+  rpoPlaysReads: number;
+  rpoPlaysBallPlacement: number;
+  scrambleAttempts: number;
+  scrambleYards: number;
+  scrambleTouchdowns: number;
+  rushingAttempts: number;
+  rushingYards: number;
+  rushingTouchdowns: number;
+  pressured: number;
+  sacks: number;
+  outstandingPlays: number;
+  turnoverWorthyPlays: number;
+}
+
+export interface TransformedQBData {
+  [qb: string]: {
+    fullName: string;
+    plays: Play[];
+  };
 }
