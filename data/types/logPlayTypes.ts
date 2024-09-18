@@ -7,6 +7,12 @@ export const logPlayTypes = [
   "QB Run with Run Read Key",
 ];
 
+export const playPersonnelTypes = [
+  '00', '01', '10', '11', '11S', '11T', '12', '12L', '13', '20', '21', '21T', '22', '23'
+];
+
+export type PlayPersonnel = typeof playPersonnelTypes[number];
+
 export interface Play {
   id?: number;
   practice_block_id?: bigint;
@@ -52,6 +58,8 @@ export type PlayResult =
   | "QB Run"
   | "Scramble"
   | "Sack"
+  | "Penalty on Defense"
+  | "Penalty on Offense"
   | "Fumble"
   | "Interception"
   | "TD Pass"
@@ -59,5 +67,4 @@ export type PlayResult =
   | "TD Scramble"
   | "TD QB Run";
 export type FormationStrength = "L" | "R";
-export type PlayHash = "L" | "LM" | "M" | "RM" | "R";
-export type PlayPersonnel = '00' | '01' | '10' | '11' | '12' | '13' | '20' | '21' | '22' | '23';
+export type PlayHash = "L" | "M" | "R";

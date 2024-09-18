@@ -2,7 +2,9 @@ import { Play } from '@/data/types/logPlayTypes';
 import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/solid';
 
 export const DrivePlaysTable: React.FC<{ plays: Play[] }> = ({ plays }) => {
-  return (
+  const sortedPlays = [...plays].sort((a, b) => (a.num_in_game_drive ?? 0) - (b.num_in_game_drive ?? 0));
+
+  return ( 
     <div className="overflow-x-auto">
       <table className="min-w-full bg-white">
         <thead className="bg-neutral-100">
@@ -19,7 +21,7 @@ export const DrivePlaysTable: React.FC<{ plays: Play[] }> = ({ plays }) => {
           </tr>
         </thead>
         <tbody>
-          {plays.map((play) => (
+          {sortedPlays.map((play) => (
             <tr key={play.id} className="border-b border-neutral-200 hover:bg-neutral-50">
               <td className="px-4 py-2 text-sm">{play.num_in_game_drive}</td>
               <td className="px-4 py-2 text-sm">{play.down}</td>
