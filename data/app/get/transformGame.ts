@@ -1,79 +1,75 @@
-import { Play, PlayCallFamilyStats } from "@/data/types/logPlayTypes";
+import { Play } from "@/data/types/logPlayTypes";
+import { PlayCallFamilyStats, TeamStats } from "@/data/types/viewDataTypes";
 
-export function transformGamePlays(plays: Play[]) {
-  let firstDowns = 0;
-  let touchdowns = 0;
-  let redZoneTDs = 0;
-  let explosives = 0;
-  let tenYardPlays = 0;
-  let fiveYardPlays = 0;
-  let onSchedulePlays = 0;
-  const totalPlays = plays.length;
-  const totalDrives = plays.reduce((acc, play) => acc.add(play.game_drive_id), new Set()).size;
-
-  const playCallFamilyStats: Record<string, PlayCallFamilyStats> = {};
-
-  const redZoneDrives = new Set<number>();
+export function transformGamePlaysTeam(plays: Play[]): TeamStats {
+  const stats: TeamStats = {
+    firstDowns: 0, firstDownChances: 0, touchdowns: 0,
+    explosives: 0, tenYardPlays: 0, fiveYardPlays: 0, onSchedulePlays: 0,
+    firstDownPercentage: 0, driveTDPercentage: 0, onSchedulePlayPercentage: 0,
+    playCallFamilyStats: {}, totalDrives: 0, totalPlays: plays.length
+  };
+  
+  const totalDrives = new Set(plays.map(p => p.game_drive_id)).size;
+  let currentDrive: number, yardsToGo = 0, isNewChance = true;
 
   plays.forEach(play => {
-    if (play.distance !== undefined && play.yards > play.distance) firstDowns++;
-
-    if (play.result.includes("TD")) touchdowns++;
-
-    if (play.game_drive_id !== undefined && play.yard_line !== undefined && play.yard_line <= 20) { 
-      redZoneDrives.add(Number(play.game_drive_id)); 
-      if (play.result.includes("TD")) redZoneTDs++;
+    if (play.game_drive_id !== undefined && Number(play.game_drive_id) !== currentDrive) {
+      currentDrive = Number(play.game_drive_id);
+      isNewChance = true;
     }
 
-    if (play.yards >= 25) explosives++;
-    if (play.yards >= 10) tenYardPlays++;
-    if (play.yards >= 5) fiveYardPlays++;
+    if (isNewChance) {
+      stats.firstDownChances++;
+      yardsToGo = play.distance || 10;
+      isNewChance = false;
+    }
 
-    if (play.on_schedule) onSchedulePlays++;
+    if (play.yards >= yardsToGo || play.result.includes("TD")) {
+      stats.firstDowns++;
+      isNewChance = true;
+    } else {
+      yardsToGo -= play.yards;
+    }
 
-    if (play.play_call_family) {
-      if (!playCallFamilyStats[play.play_call_family]) {
-        playCallFamilyStats[play.play_call_family] = { offSchedule: 0, total: 0, yards: [] }; // Initialize yards
-      }
+    if (play.down === 4 && yardsToGo > 0) isNewChance = true;
+    if (play.result.includes("TD")) stats.touchdowns++;
+    if (play.yards >= 25) stats.explosives++;
+    if (play.yards >= 10) stats.tenYardPlays++;
+    if (play.yards >= 5) stats.fiveYardPlays++;
+    if (play.on_schedule) stats.onSchedulePlays++;
 
-      playCallFamilyStats[play.play_call_family].total++;
-      playCallFamilyStats[play.play_call_family].yards.push(play.yards); // Collect yards
+    updatePlayCallFamilyStats(play, stats.playCallFamilyStats);
+  });
 
-      if (!play.on_schedule) {
-        playCallFamilyStats[play.play_call_family].offSchedule++;
-      }
+  return calculateFinalStats(stats, plays.length, totalDrives);
+}
+
+function updatePlayCallFamilyStats(play: Play, stats: Record<string, PlayCallFamilyStats>) {
+  if (play.play_call_family) {
+    if (!stats[play.play_call_family]) {
+      stats[play.play_call_family] = { offSchedule: 0, total: 0, yards: [], threePlusYards: 0, avgYards: 0, minYards: Infinity, maxYards: -Infinity, family: '' };
+    }
+    stats[play.play_call_family].total++;
+    stats[play.play_call_family].yards.push(play.yards);
+    if (!play.on_schedule) stats[play.play_call_family].offSchedule++;
+    if (play.yards >= 3) stats[play.play_call_family].threePlusYards++;
+  }
+}
+
+function calculateFinalStats(stats: TeamStats, totalPlays: number, totalDrives: number): TeamStats {
+  stats.firstDownPercentage = (stats.firstDowns / stats.firstDownChances) * 100;
+  stats.onSchedulePlayPercentage = (stats.onSchedulePlays / totalPlays) * 100;
+  stats.driveTDPercentage = (stats.touchdowns / totalDrives) * 100;
+  stats.totalPlays = totalPlays;
+  stats.totalDrives = totalDrives;
+
+  Object.values(stats.playCallFamilyStats).forEach(familyStats => {
+    if (familyStats.yards.length > 0) {
+      familyStats.avgYards = familyStats.yards.reduce((sum, yard) => sum + yard, 0) / familyStats.yards.length;
+      familyStats.minYards = Math.min(...familyStats.yards);
+      familyStats.maxYards = Math.max(...familyStats.yards);
     }
   });
 
-  const redZoneTrips = redZoneDrives.size;
-  
-  const firstDownPercentage = (firstDowns / totalPlays) * 100;
-  const onSchedulePlayPercentage = (onSchedulePlays / totalPlays) * 100;
-  const driveTDPercentage = (touchdowns / totalDrives) * 100;
-  const redZoneTDPercentage = redZoneTrips > 0 ? (redZoneTDs / redZoneTrips) * 100 : 0;
-
-  // Calculate average, min, and max yards for each play call family
-  Object.entries(playCallFamilyStats).forEach(([family, stats]) => {
-    if (stats.yards.length > 0) {
-      const totalYards = stats.yards.reduce((sum, yard) => sum + yard, 0);
-      stats.avgYards = totalYards / stats.yards.length;
-      stats.minYards = Math.min(...stats.yards);
-      stats.maxYards = Math.max(...stats.yards);
-      stats.family = family;
-    }
-  });
-
-  return {
-    firstDowns,
-    firstDownPercentage,
-    touchdowns,
-    driveTDPercentage,
-    redZoneTrips,
-    redZoneTDPercentage,
-    explosives,
-    tenYardPlays,
-    fiveYardPlays,
-    onSchedulePlayPercentage,
-    playCallFamilyStats
-  };
+  return stats;
 }

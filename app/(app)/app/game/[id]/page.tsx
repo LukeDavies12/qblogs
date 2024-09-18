@@ -1,6 +1,6 @@
 import BackLink from "@/comp/ui/backlink";
 import { getGameById } from "@/data/app/get/game";
-import { transformGamePlays } from "@/data/app/get/transformGame";
+import { transformGamePlaysTeam } from "@/data/app/get/transformGame";
 import { IndividualGame } from "@/data/types/games";
 import { Play } from "@/data/types/logPlayTypes";
 import { formatDate } from "@/data/types/parseDate";
@@ -10,16 +10,14 @@ import GameDashboard from "./GameDashboard";
 
 export default async function Page({ params }: { params: { id: string } }) {
   const game = await getGameById(Number(params.id)) as IndividualGame;
-
   const allPlays = game.game_drives.flatMap((drive) => drive.plays).filter((play): play is Play => play !== undefined);
-
-  const playStats = transformGamePlays(allPlays);
+  
   return (
     <>
       <BackLink href="/app/games" label="All Games" />
       <h1>{formatDate(game.date)} vs {game.against} Game</h1>
       <h2>Game Stats</h2>
-      <GameDashboard playStats={playStats} />
+      <GameDashboard teamStats={transformGamePlaysTeam(allPlays)} />
       <h2>Log Plays</h2>
       <div className="grid md:grid-cols-4 lg:grid-cols-8 gap-4">
         {game.game_drives.map((drive) => (
