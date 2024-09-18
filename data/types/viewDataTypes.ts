@@ -1,5 +1,3 @@
-import { Play } from "./logPlayTypes";
-
 export interface PlayCallFamilyStats {
   offSchedule: number;
   threePlusYards: number;
@@ -38,6 +36,7 @@ export interface QBStats {
   interceptions: number;
   rpoPlays: number;
   rpoPlaysReads: number;
+  rpoPlaysThrown: number;
   rpoPlaysBallPlacement: number;
   scrambleAttempts: number;
   scrambleYards: number;
@@ -54,6 +53,6 @@ export interface QBStats {
 export interface TransformedQBData {
   [qb: string]: {
     fullName: string;
-    plays: Play[];
+    stats: QBStats;
   };
 }

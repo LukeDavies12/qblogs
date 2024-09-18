@@ -74,3 +74,4 @@ function calculateFinalStats(stats: TeamStats, totalPlays: number, totalDrives: 
   return stats;
 }
 
+// function transformGamePlaysQVsQ(plays: Play[]): TransformedQBData {
