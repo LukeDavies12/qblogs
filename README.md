@@ -1,8 +1,4 @@
 # QB Logs
-![QB Logs demo image](images/QBL1.png)
-![QB Logs demo image](images/QBL-family-breakdown.png)
-![QB Logs demo image](images/QBL-log.png)
-
 QB Logs is a tool for QBs and offensive coaches.
 1. Comprehensive breakdown of QB decision-making and execution by play type
 2. Integration of game and practice data for holistic performance assessment
@@ -13,15 +9,20 @@ The platform's core thesis is that presenting offensive data from both games and
 
 Currently only used by Briar Cliff football and I am working on developing out the required features to sell as a SAAS.
 
-## Data Model
-![QB Logs Data Model Image](/images/dataModel.png)
-
-## Stack
-- Next.js (Tailwind)
-- Supabase
-
-### App Features
+## App Features
 - Authorization and Supabse RLS by use case
 - Reactive UI (pending, loading states on forms)
 - Type safety
 - Admin functions to scaffold team setup and user accounts
+
+### Stack
+- Next.js (Tailwind)
+- Supabase
+
+### Data Model
+![QB Logs Data Model Image](/images/dataModel.png)
+
+### Dev Images
+![QB Logs demo image](images/QBL1.png)
+![QB Logs demo image](images/QBL-family-breakdown.png)
+![QB Logs demo image](images/QBL-log.png)
