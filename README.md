@@ -6,7 +6,7 @@
 QB Logs is a tool for QBs and offensive coaches.
 1. Comprehensive breakdown of QB decision-making and execution by play type
 2. Integration of game and practice data for holistic performance assessment
-3. Visual representation of QB play and offensive production for week-to-week goal-setting and progress tracking
+3. Visual representation of offensive production for week-to-week goal-setting and progress tracking
 4. Custom analytics tailored for small college and high school football programs
 
 The platform's core thesis is that presenting offensive data from both games and practices in an accessible format, enhanced with domain-specific insights, will become an integral part of daily coaching and athlete development. "Practice analytically, perform intuitively."
