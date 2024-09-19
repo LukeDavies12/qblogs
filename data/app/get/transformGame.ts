@@ -120,9 +120,8 @@ export async function transformGamePlaysQBs(
 
   for (const qb of teamQBs) {
     qbData[qb.id] = {
-      fullName: qb.fullName,
+      fullName: qb.full_name,
       stats: {
-        qbFullName: qb.fullName,
         attempts: 0,
         passReadsCount: 0,
         passBallPlacementCount: 0,
@@ -133,6 +132,7 @@ export async function transformGamePlaysQBs(
         rpoPlays: 0,
         rpoPlaysReads: 0,
         rpoPlaysThrown: 0,
+        rpoPlaysCompleted: 0,
         rpoPlaysBallPlacement: 0,
         scrambleAttempts: 0,
         scrambleYards: 0,
@@ -144,6 +144,7 @@ export async function transformGamePlaysQBs(
         sacks: 0,
         outstandingPlays: 0,
         turnoverWorthyPlays: 0,
+        allPlaysCount: plays.length,
       },
     };
   }
@@ -216,14 +217,17 @@ export async function transformGamePlaysQBs(
 
     if (play.play_call_grouping === "Run with RPO") {
       qb.stats.rpoPlays++;
-      if (play.pass_read === true) {
+      if (play.run_rpo_key_read === true) {
         qb.stats.rpoPlaysReads++;
       }
       if (play.pass_ball_placement === true) {
         qb.stats.rpoPlaysBallPlacement++;
       }
-      if (play.result === "Complete" || play.result === "TD Pass") {
+      if (play.result === "Complete" || play.result === "TD Pass" || play.result === "Incomplete" || play.result === "Interception") {
         qb.stats.rpoPlaysThrown++;
+        if(play.result === "Complete" || play.result === "TD Pass") {
+          qb.stats.rpoPlaysCompleted++;
+        }
       }
     }
 

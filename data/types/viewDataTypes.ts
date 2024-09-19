@@ -26,17 +26,17 @@ export interface TeamStats {
 }
  
 export interface QBStats {
-  qbFullName: string;
   attempts: number;
-  passReadsCount: number;
-  passBallPlacementCount: number;
   completions: number;
   passingYards: number;
   passingTouchdowns: number;
   interceptions: number;
+  passReadsCount: number;
+  passBallPlacementCount: number;
   rpoPlays: number;
   rpoPlaysReads: number;
   rpoPlaysThrown: number;
+  rpoPlaysCompleted: number;
   rpoPlaysBallPlacement: number;
   scrambleAttempts: number;
   scrambleYards: number;
@@ -48,6 +48,7 @@ export interface QBStats {
   sacks: number;
   outstandingPlays: number;
   turnoverWorthyPlays: number;
+  allPlaysCount: number;
 }
 
 export interface TransformedQBData {
