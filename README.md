@@ -1,5 +1,5 @@
 # QB Logs
-A visual tool for a full picture of offensive production and QB execution across BOTH games and practices.
+A visual tool for a full picture of offensive production and QB play across BOTH games and practices.
 1. Detailed QB performance analysis by play type
 2. Integrated game and practice data for comprehensive assessment
 3. Visual offensive production tracking for goal-setting
