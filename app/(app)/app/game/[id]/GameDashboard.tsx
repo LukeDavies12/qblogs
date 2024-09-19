@@ -1,7 +1,7 @@
-import { TeamStats } from "@/data/types/viewDataTypes";
+import { TeamStats, TransformedQBData } from "@/data/types/viewDataTypes";
 import React from "react";
 
-const GameDashboard: React.FC<{ teamStats: TeamStats }> = ({ teamStats }) => (
+const GameDashboard: React.FC<{ teamStats: TeamStats, qbStats: TransformedQBData }> = ({ teamStats, qbStats }) => (
   <div className="game-dashboard">
     <h3 className="mb-1">Overview</h3>
     <div className="dashboard-stats grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-3">
@@ -14,6 +14,18 @@ const GameDashboard: React.FC<{ teamStats: TeamStats }> = ({ teamStats }) => (
     </div>
     <h3 className="mb-1">QB Play</h3>
     <h3 className="mb-1">By Play Groupings</h3>
+    <div className="dashboard-stats grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-3">
+      {Object.entries(qbStats).map(([qb, { stats }]) => (
+        <div key={qb} className="bg-white p-2 rounded-xl text-center">
+          <p className="font-semibold">{stats.qbFullName}</p>
+          <p className="text-xs text-neutral-950">Passes: {stats.attempts}</p>
+          <p className="text-xs text-neutral-950">Completions: {stats.completions}</p>
+          <p className="text-xs text-neutral-950">Yards: {stats.passingYards}</p>
+          <p className="text-xs text-neutral-950">TDs: {stats.passingTouchdowns}</p>
+          <p className="text-xs text-neutral-950">INTs: {stats.interceptions}</p>
+        </div>
+      ))}
+    </div>
     <div className="grid md:grid-cols-4 lg:grid-cols-6 gap-4">
       {Object.entries(teamStats.playCallFamilyStats)
         .sort(([, a], [, b]) => (b.avgYards || 0) - (a.avgYards || 0))
