@@ -1,11 +1,11 @@
 # QB Logs
 QB Logs is a tool for QBs and offensive coaches.
-1. Comprehensive breakdown of QB decision-making and execution by play type
-2. Integration of game and practice data for holistic performance assessment
-3. Visual representation of offensive production for week-to-week goal-setting and progress tracking
-4. Custom analytics tailored for small college and high school football programs
+1. Detailed QB performance analysis by play type
+2. Integrated game and practice data for comprehensive assessment
+3. Visual offensive production tracking for goal-setting
+4. Custom analytics tailored for your level of play
 
-The platform's core thesis is that presenting offensive data from both games and practices in an accessible format, enhanced with domain-specific insights, will be used hand-in-hand with film study on a daily basis in small college and high school football. "Practice analytically, perform intuitively."
+The main idea is that showing offensive stats from games and practices in an easy-to-understand way, along with domain knowledge, will help small college and high school football teams. They'll use this data every day alongside film study.  "Practice analytically, perform intuitively."
 
 Currently only used by Briar Cliff football and I am working on developing out the required features to sell as a SAAS.
 
