@@ -11,7 +11,7 @@ export default async function AppLayout({
 
   if (user_role.isUser === false) {
     return (
-      <div className="container mx-auto px-1 py-4">
+      <div className="py-2 px-4 2xl:container mx-auto">
         <div className="flex flex-col gap-6">
           <h1>QB Logs Dashboard</h1>
           <p className="text-red-500">

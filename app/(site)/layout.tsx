@@ -1,4 +1,3 @@
-import { getUserData } from "@/data/admin-app/get/getUserData";
 import Link from "next/link";
 
 export default async function SiteLayout({
@@ -6,21 +5,15 @@ export default async function SiteLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const user_role = await getUserData();
-
-  if (user_role.isUser === true) {
-    return (
-      <div className="mx-auto px-4 py-2 2xl:container">
-        <div className="flex flex-col gap-6">
-          <p className="text-yellow-700">You are already loggin in! <Link href={"/app"} className="link">Dashboard</Link></p>
-        </div>
+  return (
+    <div className="py-2 px-4 container mx-auto">
+      <nav className="mb-2 flex gap-4">
+      <Link href={"/"} className="link">Home</Link>
+        <Link href={"/about"} className="link">About</Link>
+      </nav>
+      <div>
+      {children}
       </div>
-    );
-  } else {
-    return (
-      <>
-        {children}
-      </>
-    );
-  }
+    </div>
+  );
 }
