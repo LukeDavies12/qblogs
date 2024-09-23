@@ -20,6 +20,5 @@ Currently only used by Briar Cliff football and I am working on developing out t
 - Supabase
 
 ### Dev Images
-![QB Logs demo image](images/QBL1.png)
 ![QB Logs demo image](images/QBL-family-breakdown.png)
 ![QB Logs demo image](images/QBL-log.png)
