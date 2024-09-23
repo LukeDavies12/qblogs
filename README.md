@@ -10,8 +10,8 @@ The main idea is that showing offensive stats from games and practices in an eas
 Currently only used by Briar Cliff football and I am working on developing out the required features to sell as a SAAS.
 
 ## App Features
-- Authorization and Supabse RLS by use case
-- Reactive UI (pending, loading states on forms)
+- Authentication and Authorization using RLS by use case
+- Reactive UI
 - Type safety
 - Admin functions to scaffold team setup and user accounts
 
