@@ -1,5 +1,5 @@
 # QB Logs
-A visual tool for a full picture of offensive production and QB play across BOTH games and practices.
+A visual tool for a full picture of offensive production and QB play across games and practices.
 1. Detailed QB performance analysis by play type
 2. Integrated game and practice data for comprehensive assessment
 3. Visual offensive production tracking for goal-setting
@@ -20,5 +20,6 @@ Currently only used by Briar Cliff football and I am working on developing out t
 - Supabase
 
 ### Dev Images
+![QB Logs demo image](images/QBL1.png)
 ![QB Logs demo image](images/QBL-family-breakdown.png)
 ![QB Logs demo image](images/QBL-log.png)
