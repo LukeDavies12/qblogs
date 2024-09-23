@@ -18,7 +18,6 @@ export default function LogGamePlays({ gameDriveId }: { gameDriveId: number }) {
     'play_call_strength', 'result', 'yards', 'play_call_grouping'
   ];
 
-  // Synchronous validation
   const validateForm = (data: Partial<Play>) => {
     return requiredFields.every(field => {
       const value = data[field];
@@ -38,7 +37,6 @@ export default function LogGamePlays({ gameDriveId }: { gameDriveId: number }) {
 
     const updatedFormData = { ...formData, [name]: inputValue };
 
-    // Validate form immediately after input change
     setIsFormValid(validateForm(updatedFormData));
 
     setFormData(updatedFormData);

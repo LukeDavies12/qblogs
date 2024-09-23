@@ -39,7 +39,7 @@ label {
 }
 
 input, textarea {
-  @apply px-2 py-1 rounded-md bg-neutral-300 hover:bg-neutral-200 focus:bg-neutral-200 outline-none w-full placeholder:text-neutral-500
+  @apply px-2 py-1 rounded-md bg-neutral-300 hover:bg-neutral-200 focus:bg-neutral-200 outline-none w-full placeholder:text-neutral-500 focus:outline-none
 }
 
 select {
