@@ -169,7 +169,6 @@ export async function updatePlay(formData: FormData, playId: number): Promise<vo
     play_call_family: formData.get("play_call_family") as string,
   };
 
-  // Remove undefined properties
   Object.keys(updatedPlay).forEach((key) => {
     if (updatedPlay[key as keyof typeof updatedPlay] === undefined) {
       delete updatedPlay[key as keyof typeof updatedPlay];
@@ -184,4 +183,7 @@ export async function updatePlay(formData: FormData, playId: number): Promise<vo
 
   if (error) throw new Error(error.message);
   if (!data) throw new Error("No data returned from update");
+
+  revalidatePath(`/app/game/drive/${data[0].game_drive_id}`, "page");
+  redirect(`/app/game/drive/${data[0].game_drive_id}`);
 }
