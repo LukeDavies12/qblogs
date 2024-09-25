@@ -4,11 +4,7 @@ import { GameDriveWithPlays } from "@/data/types/games";
 import { DrivePlaysTable } from "./DrivePlaysTable";
 import LogGamePlays from "./LogGamePlays";
 
-export default async function Page({
-  params,
-}: {
-  params: { id: string };
-}) {
+export default async function Page({ params }: {params: { id: string }}) {
   const drive = await getDriveById(Number(params.id)) as GameDriveWithPlays;
 
   return (

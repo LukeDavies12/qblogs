@@ -43,7 +43,7 @@ export async function logGamePlay(formData: FormData, gameDriveId: number) {
 
   const newPlay: Omit<Play, "game_drive_id"> & { game_drive_id: number } = {
     num_in_game_drive: parseInt(formData.get("num_in_game_drive") as string),
-    game_drive_id: gameDriveId, // Use number instead of BigInt
+    game_drive_id: gameDriveId,
     hash: formData.get("hash") as PlayHash,
     yard_line: parseInt(formData.get("yard_line") as string),
     down,
@@ -125,7 +125,7 @@ async function getCurrentTeamQbId() {
   return team_qb_id?.id;
 }
 
-export async function updatePlay(formData: FormData, playId: number): Promise<void> {
+export async function updatePlayGame(formData: FormData, playId: number): Promise<void> {
   const supabase = createClient();
 
   const down = parseInt(formData.get("down") as string);
@@ -134,6 +134,22 @@ export async function updatePlay(formData: FormData, playId: number): Promise<vo
 
   if (isNaN(down) || isNaN(distance) || isNaN(yards)) {
     throw new Error("Invalid input: down, distance, and yards must be valid numbers");
+  }
+
+  if (down === null || distance === null || yards === null) {
+    throw new Error(
+      "Invalid input: down, distance, and yards must be valid numbers"
+    );
+  }
+
+  let on_schedule = false;
+
+  if (down === 1 && distance - yards <= 6) {
+    on_schedule = true;
+  } else if (down === 2 && distance - yards <= distance / 2) {
+    on_schedule = true;
+  } else if ((down === 3 || down === 4) && yards >= distance) {
+    on_schedule = true;
   }
 
   const updatedPlay: Partial<Play> = {
@@ -167,6 +183,7 @@ export async function updatePlay(formData: FormData, playId: number): Promise<vo
     motion: formData.get("motion") as string,
     call_tag: formData.get("call_tag") as string,
     play_call_family: formData.get("play_call_family") as string,
+    on_schedule
   };
 
   Object.keys(updatedPlay).forEach((key) => {
@@ -183,6 +200,22 @@ export async function updatePlay(formData: FormData, playId: number): Promise<vo
 
   if (error) throw new Error(error.message);
   if (!data) throw new Error("No data returned from update");
+
+  revalidatePath(`/app/game/drive/${data[0].game_drive_id}`, "page");
+  redirect(`/app/game/drive/${data[0].game_drive_id}`);
+}
+
+export async function deletePlayGame(playId: number): Promise<void> {
+  const supabase = createClient();
+
+  const { data, error } = await supabase
+    .from("plays")
+    .delete()
+    .eq("id", playId)
+    .select();
+
+  if (error) throw new Error(error.message);
+  if (!data) throw new Error("No data returned from delete");
 
   revalidatePath(`/app/game/drive/${data[0].game_drive_id}`, "page");
   redirect(`/app/game/drive/${data[0].game_drive_id}`);

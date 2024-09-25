@@ -36,9 +36,7 @@ export default function LogGamePlays({ gameDriveId }: { gameDriveId: number }) {
     }
 
     const updatedFormData = { ...formData, [name]: inputValue };
-
     setIsFormValid(validateForm(updatedFormData));
-
     setFormData(updatedFormData);
   };
 

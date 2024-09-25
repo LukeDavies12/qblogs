@@ -1,22 +1,39 @@
+import { GameDrive, SeasonGame } from "@/data/types/games";
 import { Play } from "@/data/types/logPlayTypes";
 import { createClient } from "@/utils/supabase/server";
 
-export async function getPlayById(playId: number): Promise<Play> {
-  const supabase = createClient();
+interface PlayWithGameDriveAndGame {
+  playData: Play;
+  driveData: GameDrive;
+  gameData: SeasonGame;
+}
 
+export async function getPlayById(playId: number): Promise<PlayWithGameDriveAndGame> {
+  const supabase = createClient();
+  
   const { data, error } = await supabase
     .from("plays")
-    .select("*")
+    .select(`
+      *,
+      game_drive:game_drives (
+        *,
+        game:games (*)
+      )
+    `)
     .eq("id", playId)
-    .single(); 
+    .single();
 
   if (error) {
     throw new Error(error.message);
   }
 
-  if (!data) {
-    throw new Error("Play not found");
+  if (!data || !data.game_drive || !data.game_drive.game) {
+    throw new Error("Play, game drive, or game not found");
   }
 
-  return data as Play;
+  return {
+    playData: data as Play,
+    driveData: data.game_drive as GameDrive,
+    gameData: data.game_drive.game as SeasonGame
+  };
 }

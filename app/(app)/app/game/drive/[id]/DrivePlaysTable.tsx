@@ -1,10 +1,12 @@
 import { Play } from '@/data/types/logPlayTypes';
+import { PencilSquareIcon } from '@heroicons/react/24/outline';
 import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/solid';
+import Link from 'next/link';
 
 export const DrivePlaysTable: React.FC<{ plays: Play[] }> = ({ plays }) => {
   const sortedPlays = [...plays].sort((a, b) => (a.num_in_game_drive ?? 0) - (b.num_in_game_drive ?? 0));
 
-  return ( 
+  return (
     <div className="overflow-x-auto">
       <table className="min-w-full bg-white">
         <thead className="bg-neutral-100">
@@ -18,6 +20,7 @@ export const DrivePlaysTable: React.FC<{ plays: Play[] }> = ({ plays }) => {
             <th className="px-4 py-2 text-left text-sm font-semibold text-neutral-600">Result</th>
             <th className="px-4 py-2 text-left text-sm font-semibold text-neutral-600">Yards</th>
             <th className="px-4 py-2 text-left text-sm font-semibold text-neutral-600">On Schedule</th>
+            <th className="px-4 py-2 text-left text-sm font-semibold text-neutral-600">Update</th>
           </tr>
         </thead>
         <tbody>
@@ -32,12 +35,13 @@ export const DrivePlaysTable: React.FC<{ plays: Play[] }> = ({ plays }) => {
               <td className="px-4 py-2 text-sm">{play.result}</td>
               <td className="px-4 py-2 text-sm">{play.yards}</td>
               <td className="px-4 py-2 text-sm">
-              {play.on_schedule === true ? (
+                {play.on_schedule === true ? (
                   <CheckCircleIcon className="text-green-500 h-5 w-5" />
                 ) : (
                   <XCircleIcon className="text-red-500 h-5 w-5" />
                 )}
               </td>
+              <td className="px-4 py-2 text-sm"><Link href={`/app/game/play/${play.id}`}><PencilSquareIcon className="text-sky-700 h-5 w-5" /></Link></td>
             </tr>
           ))}
         </tbody>
