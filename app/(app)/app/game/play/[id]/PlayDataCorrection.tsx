@@ -53,8 +53,6 @@ export default function PlayDataCorrection({ play, authorized }: { play: Play; a
       await updatePlayGame(formDataToSend, play.id!);
     } catch (error) {
       setError(error instanceof Error ? error.message : 'An error occurred while updating the play.');
-    } finally {
-      setIsPending(false);
     }
   };
 

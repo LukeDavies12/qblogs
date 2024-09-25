@@ -18,38 +18,40 @@ export const FormInputPlay = ({ label, name, type, options, required, placeholde
 
   return (
     <div className="mb-4">
-      <label htmlFor={id} className="block text-sm mb-1 text-gray-700">{label}</label>
       {type !== 'checkbox' && (
         <label htmlFor={id} className="block text-sm mb-1 text-gray-700">
           {label}
         </label>
       )}
       {type === 'checkbox' ? (
-        <label
-          htmlFor={id}
-          className={`flex items-center w-full bg-white border rounded-md px-2 py-1 ${disabled
+        <>
+          <label htmlFor={id} className="block text-sm mb-1 text-gray-700">{label}</label>
+          <label
+            htmlFor={id}
+            className={`flex items-center w-full bg-white border rounded-md px-2 py-1 ${disabled
               ? 'border-neutral-200 bg-neutral-100 cursor-not-allowed'
               : 'border-neutral-300 cursor-pointer hover:bg-neutral-50'
-            }`}
-        >
-          <input
-            id={id}
-            type="checkbox"
-            name={name}
-            onChange={onChange}
-            required={required}
-            className={`mr-2 h-5 w-5 accent-sky-700 ${disabled ? 'cursor-not-allowed' : 'cursor-pointer'
-              }`}
-            disabled={disabled}
-            checked={Boolean(value)}
-          />
-          <span
-            className={`text-xs select-none ${disabled ? 'text-neutral-400' : 'text-gray-700'
               }`}
           >
-            {label}
-          </span>
-        </label>
+            <input
+              id={id}
+              type="checkbox"
+              name={name}
+              onChange={onChange}
+              required={required}
+              className={`mr-2 h-5 w-5 accent-sky-700 ${disabled ? 'cursor-not-allowed' : 'cursor-pointer'
+                }`}
+              disabled={disabled}
+              checked={Boolean(value)}
+            />
+            <span
+              className={`text-xs select-none ${disabled ? 'text-neutral-400' : 'text-gray-700'
+                }`}
+            >
+              {label}
+            </span>
+          </label>
+        </>
       ) : type === 'select' ? (
         <select
           id={id}

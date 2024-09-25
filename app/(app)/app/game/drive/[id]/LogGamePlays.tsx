@@ -25,7 +25,9 @@ export default function LogGamePlays({ gameDriveId }: { gameDriveId: number }) {
     });
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+  ) => {
     const { name, value, type } = e.target;
     let inputValue: string | number | boolean = value;
 
@@ -37,6 +39,7 @@ export default function LogGamePlays({ gameDriveId }: { gameDriveId: number }) {
 
     const updatedFormData = { ...formData, [name]: inputValue };
     setIsFormValid(validateForm(updatedFormData));
+
     setFormData(updatedFormData);
   };
 
@@ -197,7 +200,14 @@ export default function LogGamePlays({ gameDriveId }: { gameDriveId: number }) {
       {error && <p className="text-red-500 mb-4">{error}</p>}
       <div className='grid grid-cols-7 gap-1 items-center'>
         {finalFormFields.map((field) => (
-          <FormInputPlay key={field.name} {...field} onChange={handleInputChange} />
+          <FormInputPlay
+            key={field.name} {...field}
+            onChange={handleInputChange}
+            value={
+              formData[field.name] === 'null' || formData[field.name] === null
+                ? ''
+                : formData[field.name] as string | number | boolean | undefined
+            } />
         ))}
       </div>
       <div>
