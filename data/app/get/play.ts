@@ -8,7 +8,7 @@ export async function getPlayById(playId: number): Promise<Play> {
     .from("plays")
     .select("*")
     .eq("id", playId)
-    .single(); // Fetch a single play by ID
+    .single(); 
 
   if (error) {
     throw new Error(error.message);
@@ -18,5 +18,5 @@ export async function getPlayById(playId: number): Promise<Play> {
     throw new Error("Play not found");
   }
 
-  return data as Play; // Cast the data to the Play type
+  return data as Play;
 }
