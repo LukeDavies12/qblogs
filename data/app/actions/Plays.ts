@@ -201,7 +201,7 @@ export async function updatePlayGame(formData: FormData, playId: number): Promis
   if (error) throw new Error(error.message);
   if (!data) throw new Error("No data returned from update");
 
-  revalidatePath(`/app/game/drive/${data[0].game_drive_id}`, "page");
+  revalidatePath(`/app/`, "layout");
   redirect(`/app/game/drive/${data[0].game_drive_id}`);
 }
 

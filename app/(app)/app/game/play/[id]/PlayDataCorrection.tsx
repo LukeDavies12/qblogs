@@ -142,13 +142,13 @@ export default function PlayDataCorrection({ play, authorized }: { play: Play; a
                     Cancel
                   </button>
                   <button type="submit" className="primary" disabled={isPending}>
-                    {isPending ? 'Updating...' : 'Update Play'}
+                    {isPending ? 'Updating Play...' : 'Update Play'}
                   </button>
                 </>
               ) : (
                 <>
                   <button type="button" className="danger" onClick={handleDelete} disabled={isPending}>
-                    {isPending ? 'Deleting...' : 'Delete Play'}
+                    {isPending ? 'Deleting Play...' : 'Delete Play'}
                   </button>
                   <button type="button" className="primary" onClick={toggleEditing}>
                     Edit Play
